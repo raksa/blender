@@ -4024,7 +4024,7 @@ static ImBuf *do_text_effect(const SeqRenderData *context,
 
   BLF_position(font, x, y, 0.0f);
   BLF_buffer_col(font, data->color);
-  BLF_draw_buffer(font, data->text, BLF_DRAW_STR_DUMMY_MAX);
+  BLF_draw_buffer(font, data->text, BLF_DRAW_STR_DUMMY_MAX); // raqm debug here on draw active effect script
 
   BLF_buffer(font, NULL, NULL, 0, 0, 0, NULL);
 

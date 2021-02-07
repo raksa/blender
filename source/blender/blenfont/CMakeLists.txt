@@ -77,3 +77,44 @@ endif()
 
 
 blender_add_lib(bf_blenfont "${SRC}" "${INC}" "${INC_SYS}" "${LIB}")
+
+# RAQM
+# macOS:
+#   $% brew install libraqm
+# windows:
+#   - check https://github.com/microsoft/vcpkg
+#   > vcpkg integrate install
+#   > vcpkg install libraqm
+# linux:
+#   - build from https://github.com/HOST-Oman/libraqm
+
+# create make.bat in ..\blender with DOS script:
+# ---------------------------------------
+# @echo off
+# REM This batch file does an out-of-source CMake build in ../build_windows
+# REM This is for users who like to configure & build Blender with a single command.
+# setlocal EnableDelayedExpansion
+# setlocal ENABLEEXTENSIONS
+# set BLENDER_DIR=%~dp0blender
+# set RAQM_LIB="%VCPKG_ROOT%\installed\x86-windows\lib\raqm.lib"
+# set RAQM_INCLUDE="%VCPKG_ROOT%\installed\x86-windows\include"
+# 
+# echo RAQM_LIB=%RAQM_LIB%
+# echo RAQM_LIB=%RAQM_INCLUDE%
+# 
+# echo %BLENDER_DIR%\make.bat %*
+# %BLENDER_DIR%\make.bat %*
+# 
+# :EOF
+# ---------------------------------------
+
+
+if(NOT WIN32)
+  find_package(PkgConfig)
+  pkg_check_modules(MY_RAQM REQUIRED IMPORTED_TARGET raqm)
+  target_link_libraries(bf_blenfont PUBLIC PkgConfig::MY_RAQM)
+else(WIN32)
+  target_link_libraries(bf_blenfont PUBLIC $ENV{RAQM_LIB})
+  target_include_directories(bf_blenfont PUBLIC $ENV{RAQM_INCLUDE})
+endif()
+add_definitions(-DWITH_FONT_RAQM)

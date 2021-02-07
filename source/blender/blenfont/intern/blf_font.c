@@ -58,6 +58,10 @@
 
 #include "BLI_strict_flags.h"
 
+#ifdef WITH_FONT_RAQM
+  #include "raqm.h"
+#endif
+
 #ifdef WIN32
 #  define FT_New_Face FT_New_Face__win32_compat
 #endif
@@ -562,7 +566,8 @@ static void blf_font_draw_buffer_ex(FontBLF *font,
                                     size_t len,
                                     struct ResultBLF *r_info,
                                     int pen_y)
-{
+{ // raqm append text buffer to storing buffer
+  raqm_t *rq = raqm_create();
   unsigned int c, c_prev = BLI_UTF8_ERR;
   GlyphBLF *g, *g_prev = NULL;
   int pen_x = (int)font->pos[0];
